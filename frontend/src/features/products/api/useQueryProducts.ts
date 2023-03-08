@@ -7,7 +7,7 @@ type Args = {
   year: number;
 };
 
-const getProducts = async ({ month, year }: Args) => {
+export const getProducts = async ({ month, year }: Args) => {
   const url = `/products/${year}/${month}`;
   const { data } = await axios.get<GetProduct[]>(url);
 
@@ -18,4 +18,5 @@ export const useQueryProducts = (year: number, month: number) =>
   useQuery<GetProduct[], Error>({
     queryKey: ["products", year, month],
     queryFn: () => getProducts({ month, year }),
+    staleTime: 1000 * 60 * 60,
   });

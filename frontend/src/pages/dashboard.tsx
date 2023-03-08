@@ -12,12 +12,14 @@ import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { Product } from "@prisma/client";
 import axios from "src/libs/axios";
 import { useSelectDateState } from "src/features/products/store";
+import { usePrefetchProducts } from "src/features/products/api/usePrefetchProducts";
 
 const Dashboard: NextPage = () => {
   const setModal = useGlobalState((state) => state.setModal);
   const increaseMonth = useSelectDateState((state) => state.increaseMonth);
   const decreaseMonth = useSelectDateState((state) => state.decreaseMonth);
   const selectDate = useSelectDateState((state) => state.date);
+  const { prefetchProducts } = usePrefetchProducts();
 
   return (
     <div>
@@ -27,6 +29,24 @@ const Dashboard: NextPage = () => {
             variant="transparent"
             size="xl"
             color="blue"
+            onTouchStart={() =>
+              prefetchProducts({
+                year:
+                  selectDate.month === 1
+                    ? selectDate.year - 1
+                    : selectDate.year,
+                month: selectDate.month === 1 ? 12 : selectDate.month - 1,
+              })
+            }
+            onMouseEnter={() =>
+              prefetchProducts({
+                year:
+                  selectDate.month === 1
+                    ? selectDate.year - 1
+                    : selectDate.year,
+                month: selectDate.month === 1 ? 12 : selectDate.month - 1,
+              })
+            }
             onClick={decreaseMonth}
           >
             <ArrowLeftIcon className="h-6 w-6" />
@@ -36,6 +56,24 @@ const Dashboard: NextPage = () => {
             size="xl"
             variant="transparent"
             color="blue"
+            onTouchStart={() =>
+              prefetchProducts({
+                year:
+                  selectDate.month === 12
+                    ? selectDate.year + 1
+                    : selectDate.year,
+                month: selectDate.month === 12 ? 1 : selectDate.month + 1,
+              })
+            }
+            onMouseEnter={() =>
+              prefetchProducts({
+                year:
+                  selectDate.month === 12
+                    ? selectDate.year + 1
+                    : selectDate.year,
+                month: selectDate.month === 12 ? 1 : selectDate.month + 1,
+              })
+            }
             onClick={increaseMonth}
           >
             <ArrowRightIcon className="h-6 w-6" />
